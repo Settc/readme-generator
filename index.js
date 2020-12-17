@@ -1,7 +1,7 @@
 const inquirer = require("inquirer")
 const fs = require("fs")
 const util = require("util")
-// const { generate } = require("rxjs")
+
 
 const writeFileAsync = util.promisify(fs.writeFile)
 
@@ -21,22 +21,22 @@ const questions = () => {
         },
         {
             type: "input",
-            name: "installation instructions",
+            name: "installation",
             message: "Please enter the instructions for installation"
         },
         {
             type: "input",
-            name: "usage info",
-            message: "Please enter the usage info"
+            name: "usage",
+            message: "How to use this project?"
         },
         {
             type: "input",
-            name: "contribution",
-            message: "Please enter the contribution guidelines"
+            name: "contributing",
+            message: "Who contributed on this project?"
         },
         {
             type: "input",
-            name: "test instructions",
+            name: "test",
             message: "Please enter the test instructions"
         },
         {
@@ -66,12 +66,38 @@ const generateMD = (answers) =>
 # ${answers.title}
 
 ## Description
-
+[![License](https://img.shields.io/badge/License-${answers.license}-blue.svg)]
+    ${answers.description}
 ## Table of Contents
-* [Installation] (#Installation)
-* [Usage] (#Usage)
-* [Contributing] (#Contributing)
+
+* [Installation](#Installation)
+* [Usage](#Usage)
+* [Contributing](#Contributing)
+* [Tests](#Tests)
+* [Questions](#Questions)
+* [License](#License)
+
+### Installation:
+    ${answers.installation}
+
+### Usage:
+    ${answers.usage}
+
+### Contributing:
+    ${answers.contributing}
+
+### Tests:
+    ${answers.test}
+
+### Questions?:
+    www.github.com/${answers.github}
+    ${answers.email}
+
+### License: This work is protect by the ${answers.license} license. Please go to 
+    www.opensource.org/licenses to learn more
 `
+
+
 // Description, Table of Contents, Installation, Usage, License, Contributing, Tests, and Questions
 // function to write README file
 // function writeToFile(fileName, data) {
