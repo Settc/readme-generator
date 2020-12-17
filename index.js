@@ -1,16 +1,18 @@
 const inquirer = require("inquirer")
 const fs = require("fs")
+const util = require("util")
+// const { generate } = require("rxjs")
 
-// array of questions for user
-// WHEN I enter a description, installation instructions, 
-// usage information, contribution guidelines, and test instructions
+const writeFileAsync = util.promisify(fs.writeFile)
 
-const questions = () =>
-    inquirer.prompt([
+
+
+const questions = () => {
+   return inquirer.prompt([
         {
             type: "input",
             name: "title",
-            message: "What is the title of your README?"
+            message: "What is the title of your README?",
         },
         {
             type: "input",
@@ -29,18 +31,22 @@ const questions = () =>
         },
         {
             type: "input",
-            name: "",
+            name: "contribution",
             message: "Please enter the contribution guidelines"
         },
         {
             type: "input",
-            name: "",
+            name: "test instructions",
             message: "Please enter the test instructions"
         },
         {
             type: "rawlist",
             name: "license",
-            message: "Please choose a license"
+            message: "Please choose a license (Visit www.choosealicense.com to help you decide!)",
+            choices: [
+                "MIT",
+                "GNU GPLv3"
+            ]
         },
         {
             type: "input",
@@ -51,16 +57,38 @@ const questions = () =>
             type: "input",
             name: "email",
             message: "What is your email?"
-        },
-        
-])
-
-// function to write README file
-function writeToFile(fileName, data) {
+        },        
+    ])
 }
 
+const generateMD = (answers) => 
+`
+# ${answers.title}
+
+## Description
+
+## Table of Contents
+* [Installation] (#Installation)
+* [Usage] (#Usage)
+* [Contributing] (#Contributing)
+`
+// Description, Table of Contents, Installation, Usage, License, Contributing, Tests, and Questions
+// function to write README file
+// function writeToFile(fileName, data) {
+//     fs.writeFile()
+// }
+
 // function to initialize program
-function init() {
+const init = async () => {
+    try {
+        const answers = await questions()
+
+        const MD = generateMD(answers)
+
+        await writeFileAsync("README.md", MD)
+    } catch (e) {
+        console.error(e)
+    }
 
 }
 
@@ -70,7 +98,7 @@ init();
 
 // GIVEN a command-line application that accepts user input
 // WHEN I am prompted for information about my application repository
-// THEN a high-quality, professional README.md is generated with the title of my project and sections entitled Description, Table of Contents, Installation, Usage, License, Contributing, Tests, and Questions
+// THEN a high-quality, professional README.md is generated with the title of my project and sections entitled
 // WHEN I enter my project title
 // THEN this is displayed as the title of the README
 // WHEN I enter a description, installation instructions, usage information, contribution guidelines, and test instructions
